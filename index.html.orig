@@ -1,0 +1,14 @@
+<<<<<<< HEAD
+---
+layout: default
+title: Why-el's Website
+---
+
+{% for post in site.posts limit:5 %}
+<h2> <a href="{{post.url}}">{{post.title}}</a></h2>
+{{post.content}}
+<em> Posted on {{post.date | date_to_long_string}}.</em>
+{% endfor %}
+=======
+Coming soon.
+>>>>>>> 70e85c2a362a516108fb9d16a57b971edafe77f9
