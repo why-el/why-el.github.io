@@ -1,5 +1,59 @@
-@media (min-width: 768px) { 
-  .sb-fixed{
-    position: fixed;
-  } 
+#overview{
+	text-align: center;
 }
+
+.custom .navbar-inner {
+      background-image: none;
+    background-repeat: no-repeat;
+    filter: none;
+    background: #ffffff; /* Old browsers */
+  /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+   -webkit-box-shadow: none; 
+  -moz-box-shadow: none; 
+  box-shadow: none; 
+   border: 0px solid #d4d4d4;
+  -webkit-border-radius: 0px;
+     -moz-border-radius: 0px;
+          border-radius: 0px;
+}
+
+.navbar .nav .active > a, .navbar .nav .active > a:hover {
+    background-color: #EC633F;
+    }
+
+    .navbar .nav .active > a, .navbar .nav  > a {
+    background-color: #EC633F;
+    }
+
+.navbar-fixed-top .brand {
+  color: #333;
+}
+
+.navbar .nav > li > a:hover {color:#EC633F;}
+
+.navbar .nav .active > a, .navbar .nav .active > a:hover {color:white;}
+
+.navbar .nav > li > a {
+  /*float: none;*/
+  padding: 40px 15px 10px;
+  color: #333;
+  text-decoration: none;
+}
+.navbar {
+  padding-right: 25px;
+}
+
+#logo{
+  padding-left: 35px; 
+  height: 100px;
+    width: 300px;
+}
+
+.bordered {
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.25);
+    margin: 0 5px 10px 5px;
+    }
+
+
+
+
