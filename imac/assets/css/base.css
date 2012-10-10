@@ -63,5 +63,29 @@
     height: auto;
 }
 
+.line{
+  transform-origin: 0 100%;
+  height: 40px; /* Line width of 3 */
+  background: #000; /* Black fill */
+}
+
+.droppable {
+  width: 150px;
+  height: 150px;
+  padding: 0.5em;
+  float: left;
+  margin: 10px;
+  border: 1px solid;
+  text-align: center;
+}
+.correct{
+  background-color:green;
+}
+.notCorrect{
+  background-color: red;
+}
+
+
+
 
 
