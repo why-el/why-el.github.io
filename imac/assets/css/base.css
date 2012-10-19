@@ -2,6 +2,10 @@
 	text-align: center;
 }
 
+.centered{
+  text-align: center;
+}
+
 .custom .navbar-inner {
       background-image: none;
     background-repeat: no-repeat;
@@ -52,6 +56,7 @@
 .bordered {
     box-shadow: 0 1px 20px rgba(0, 0, 0, 0.25);
     margin: 0 5px 10px 5px;
+    padding: 20px 20px 20px 20px;
     }
 .resize {
     width: 150px;
