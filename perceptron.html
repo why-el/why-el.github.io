@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perceptron Simulation</title>
+    <style>
+        #plane { background: #f0f0f0; border: 1px solid black; }
+        .color-selector { margin-bottom: 10px; }
+    </style>
+</head>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('plane');
+    const ctx = canvas.getContext('2d');
+    let points = [];
+    let currentLabel = 1; // Start with the blue class
+
+    // Set default parameters
+    let weights = [0, 0];
+    let bias = 0;
+    let learningRate = 0.1;
+
+    // Button event listeners for class selection
+    document.getElementById('class1Btn').addEventListener('click', () => currentLabel = 1); // Blue class
+    document.getElementById('class2Btn').addEventListener('click', () => currentLabel = -1); // Red class
+
+    canvas.addEventListener('click', function(event) {
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        points.push({x, y, label: currentLabel});
+        drawPoint(x, y, currentLabel);
+    });
+
+    document.getElementById('iterate').addEventListener('click', function() {
+        // Use user input or defaults
+        weights[0] = parseFloat(document.getElementById('weight1').value) || weights[0];
+        weights[1] = parseFloat(document.getElementById('weight2').value) || weights[1];
+        bias = parseFloat(document.getElementById('bias').value) || bias;
+        learningRate = parseFloat(document.getElementById('learningRate').value) || learningRate;
+
+        iterate();
+        redrawCanvas();
+
+        // Update inputs with new values
+        document.getElementById('weight1').value = weights[0].toFixed(2);
+        document.getElementById('weight2').value = weights[1].toFixed(2);
+        document.getElementById('bias').value = bias.toFixed(2);
+        document.getElementById('learningRate').value = learningRate.toFixed(2);
+    });
+
+    function iterate() {
+        points.forEach(point => {
+            // Normalize coordinates
+            const x = [point.x / canvas.width, point.y / canvas.height];
+            const predicted = predict(x);
+            const error = point.label - predicted;
+
+            // Update weights and bias with checks for non-zero learning rate
+            if (learningRate !== 0) {
+                weights[0] += learningRate * error * x[0];
+                weights[1] += learningRate * error * x[1];
+                bias += learningRate * error;
+            }
+        });
+    }
+
+    function predict(inputs) {
+        // Calculate weighted sum
+        const sum = weights[0] * inputs[0] + weights[1] * inputs[1] + bias;
+        return sum >= 0 ? 1 : -1;
+    }
+
+    function drawPoint(x, y, label) {
+        // Draw points with different colors for each class
+        ctx.fillStyle = label === 1 ? 'blue' : 'red';
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        ctx.fill();
+    }
+
+    function redrawCanvas() {
+        // Clear and redraw everything
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        points.forEach(point => {
+            drawPoint(point.x, point.y, point.label);
+        });
+        drawDecisionBoundary();
+    }
+
+    function drawDecisionBoundary() {
+        if (weights[1] !== 0) { // Check to prevent division by zero
+            const x0 = 0;
+            const y0 = (-bias - weights[0] * x0) / weights[1] * canvas.height;
+            const x1 = canvas.width;
+            const y1 = (-bias - weights[0] * x1 / canvas.width) / weights[1] * canvas.height;
+
+            ctx.strokeStyle = 'black';
+            ctx.beginPath();
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(x1, y1);
+            ctx.stroke();
+        }
+    }
+});
+
+</script>
+<body>
+<p>
+  This is a simulation of the most elementary perceptron. Here, you can simulate distinguishing between two simple scenarios on this 2D canvas, which might represent, for example, two different locations in a garden. You can use blue to mark points that get a lot of sunlight (higher on the y-axis and further to the right on the x-axis) and red to mark points that are more shaded. After you've placed your points, click "Iterate" to let the perceptron find a line that conceptually separates sunny spots from shaded spots. This "learned" line demonstrates the perceptron's ability to classify data based on given features. For any new point you plot, the model will predict whether it's likely to be in a sunny or shaded area, showing the power of simple linear classification.
+</p>
+
+<p>
+  The points you plot on the canvas act as the "training set" for the perceptron model. Each point, marked either in blue or red, provides the model with examples of different classifications based on their coordinates. This process is akin to teaching the model what characteristics (in this case, positions) define each class. By plotting these points, you're essentially instructing the perceptron on how to distinguish between the two scenarios you've defined. The better and more clearly separated your training set is, the more effectively the perceptron can learn to classify new, unseen points. It's a hands-on way to see how machine learning algorithms learn from examples and adjust their parameters to make accurate predictions.
+</p>
+
+<p>
+  As you interact with this simulation, you're encouraged to adjust the weights and the learning rate to see how these changes influence the model's ability to find a separating line. The weights determine the slope and orientation of the line, while the learning rate controls how quickly the model adapts during each iteration. It's a hands-on way to understand the impact of these parameters on the learning process. However, it's important to note that a perceptron relies on the data being linearly separable. If the blue and red points cannot be divided by a straight line—imagine a scenario where shaded and sunny spots are mixed without a clear division—the perceptron will struggle to converge on a solution. This limitation highlights the importance of choosing the right model and features for your classification task. Experimenting with different configurations will give you deeper insight into the challenges and capabilities of simple machine learning models.
+</p>
+
+    <div class="color-selector">
+        <button id="class1Btn">Blue Class</button>
+        <button id="class2Btn">Red Class</button>
+    </div>
+    <canvas id="plane" width="400" height="400"></canvas>
+    <div>
+        <input type="number" id="weight1" placeholder="Weight w1" value="0.1">
+        <input type="number" id="weight2" placeholder="Weight w2" value="0.2">
+        <input type="number" id="bias" placeholder="Bias b" value="1">
+        <input type="number" step="0.01" id="learningRate" placeholder="Learning Rate η" value="0.1">
+        <button id="iterate">Iterate</button>
+    </div>
+    <script src="perceptron.js"></script>
+</body>
+</html>
