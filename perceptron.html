@@ -117,18 +117,20 @@ document.addEventListener('DOMContentLoaded', () => {
   As you interact with this simulation, you're encouraged to adjust the weights and the learning rate to see how these changes influence the model's ability to find a separating line. The weights determine the slope and orientation of the line, while the learning rate controls how quickly the model adapts during each iteration. It's a hands-on way to understand the impact of these parameters on the learning process. However, it's important to note that a perceptron relies on the data being linearly separable. If the blue and red points cannot be divided by a straight line—imagine a scenario where shaded and sunny spots are mixed without a clear division—the perceptron will struggle to converge on a solution. This limitation highlights the importance of choosing the right model and features for your classification task. Experimenting with different configurations will give you deeper insight into the challenges and capabilities of simple machine learning models.
 </p>
 
-    <div class="color-selector">
-        <button id="class1Btn">Blue Class</button>
-        <button id="class2Btn">Red Class</button>
-    </div>
-    <canvas id="plane" width="400" height="400"></canvas>
-    <div>
-        <input type="number" id="weight1" placeholder="Weight w1" value="0.1">
-        <input type="number" id="weight2" placeholder="Weight w2" value="0.2">
-        <input type="number" id="bias" placeholder="Bias b" value="1">
-        <input type="number" step="0.01" id="learningRate" placeholder="Learning Rate η" value="0.1">
-        <button id="iterate">Iterate</button>
-    </div>
-    <script src="perceptron.js"></script>
+<div class="color-selector">
+    <button id="class1Btn">Blue Class</button>
+    <button id="class2Btn">Red Class</button>
+</div>
+<canvas id="plane" width="400" height="400"></canvas>
+<div>
+    <input type="number" id="weight1" name="weight1" placeholder="Weight w1" value="0">
+    <input type="number" id="weight2" name="weight2" placeholder="Weight w2" value="0">
+    <input type="number" id="bias" name="bias" placeholder="Bias b" value="0">
+    <input type="number" step="0.01" id="learningRate" name="learningRate" placeholder="Learning Rate η" value="0.1">
+    <button id="iterate">Iterate</button>
+</div>
+<p>
+  In this simulation, the initial weights and bias you set serve as starting points for the perceptron's decision line—the demarcation that differentiates the blue and red classes on the canvas. The weights impact the line's orientation, affecting how the model evaluates the importance of each axis for classification. Meanwhile, the bias shifts this line without changing its tilt, akin to an offset, enabling it to encapsulate the division between classes more effectively. Once you've chosen the initial values, the perceptron takes over, automatically adjusting these parameters based on the training set you provided. This iterative adjustment is the model's learning process, striving to refine the decision boundary to accurately separate new points according to the examples given. Your role is to plot the training points and observe how the model learns to classify them, showcasing the fundamental principles of machine learning in action.
+</p>
 </body>
 </html>
