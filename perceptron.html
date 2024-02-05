@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <label for="learningRate">learning rate η:</label>
 <input type="number" step="0.01" id="learningRate" name="learningRate" placeholder="Learning Rate η" value="0.1">value="0.1">
-    <button id="iterate">Iterate</button>
+    <button id="iterate">Iterate. Click until you see the correct line (simulate the "training")</button>
 </div>
 <p>
   In this simulation, the initial weights and bias you set serve (we picked some defaults for you) as starting points for the perceptron's decision line—the demarcation that differentiates the blue and red classes on the canvas. The weights impact the line's orientation, affecting how the model evaluates the importance of each axis for classification. Meanwhile, the bias shifts this line without changing its tilt, akin to an offset, enabling it to encapsulate the division between classes more effectively. Once you've chosen the initial values, the perceptron takes over, automatically adjusting these parameters based on the training set you provided. This iterative adjustment is the model's learning process, striving to refine the decision boundary to accurately separate new points according to the examples given. Your role is to plot the training points and observe how the model learns to classify them, showcasing the fundamental principles of machine learning in action.
