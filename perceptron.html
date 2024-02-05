@@ -106,16 +106,25 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 <body>
 <p>
-  This is a simulation of the most elementary perceptron. Here, you can simulate distinguishing between two simple scenarios on this 2D canvas, which might represent, for example, two different locations in a garden. You can use blue to mark points that get a lot of sunlight (higher on the y-axis and further to the right on the x-axis) and red to mark points that are more shaded. After you've placed your points, click "Iterate" to let the perceptron find a line that conceptually separates sunny spots from shaded spots. This "learned" line demonstrates the perceptron's ability to classify data based on given features. For any new point you plot, the model will predict whether it's likely to be in a sunny or shaded area, showing the power of simple linear classification.
+Welcome to a basic perceptron simulation. This tool demonstrates a simple algorithm's ability to classify data into two categories. On this 2D canvas, you will plot points representing two scenarios, such as areas in a garden with different sunlight exposure.
 </p>
 
 <p>
-  The points you plot on the canvas act as the "training set" for the perceptron model. Each point, marked either in blue or red, provides the model with examples of different classifications based on their coordinates. This process is akin to teaching the model what characteristics (in this case, positions) define each class. By plotting these points, you're essentially instructing the perceptron on how to distinguish between the two scenarios you've defined. The better and more clearly separated your training set is, the more effectively the perceptron can learn to classify new, unseen points. It's a hands-on way to see how machine learning algorithms learn from examples and adjust their parameters to make accurate predictions.
+<strong>Task:</strong> Mark sunny spots with <strong>blue</strong> and shaded areas with <strong>red</strong>. These points are your training set, which teaches the perceptron to differentiate between sunny and shaded based on their canvas positions. After plotting, press the <strong>Iterate</strong> button repeatedly to start the perceptron's learning, which tries to draw a separating line between the points.
 </p>
 
 <p>
-  As you interact with this simulation, you're encouraged to adjust the weights and the learning rate to see how these changes influence the model's ability to find a separating line. The weights determine the slope and orientation of the line, while the learning rate controls how quickly the model adapts during each iteration. It's a hands-on way to understand the impact of these parameters on the learning process. However, it's important to note that a perceptron relies on the data being linearly separable. If the blue and red points cannot be divided by a straight line—imagine a scenario where shaded and sunny spots are mixed without a clear division—the perceptron will struggle to converge on a solution. This limitation highlights the importance of choosing the right model and features for your classification task. Experimenting with different configurations will give you deeper insight into the challenges and capabilities of simple machine learning models.
+The placement of your points influences the perceptron's learning efficiency. A clear separation helps it quickly learn the distinction. With each iteration, the model adjusts its decision line to classify the spots accurately. Experiment with different point placements and observe the adjustments.
 </p>
+
+<p>
+You can also experiment with the initial weights and learning rate, key parameters that affect the model's learning behavior. However, the perceptron is most effective when the data is linearly separable. If points are mixed without a clear division, finding a separating line may not be possible, highlighting the need for appropriate model and feature selection.
+</p>
+
+<p>
+This simulation offers a hands-on experience with machine learning, showing how algorithms learn from data to make predictions.
+</p>
+
 
 <div class="color-selector">
     <button id="class1Btn">Blue Class</button>
@@ -124,20 +133,20 @@ document.addEventListener('DOMContentLoaded', () => {
 <canvas id="plane" width="500" height="500"></canvas>
 <div>
 <label for="weight1">weight 1:</label>
-<input type="number" id="weight1" name="weight1" placeholder="Weight w1" value="0">
+<input type="number" id="weight1" name="weight1" placeholder="Weight w1" value="0.1">
 
 <label for="weight2">weight 2:</label>
-<input type="number" id="weight2" name="weight2" placeholder="Weight w2" value="0">
+<input type="number" id="weight2" name="weight2" placeholder="Weight w2" value="0.1">
 
 <label for="bias">bias:</label>
 <input type="number" id="bias" name="bias" placeholder="Bias b" value="0">
 
 <label for="learningRate">learning rate η:</label>
 <input type="number" step="0.01" id="learningRate" name="learningRate" placeholder="Learning Rate η" value="0.1">
-    <button id="iterate">Iterate. Click until you see the correct line (simulate the "training")</button>
+    <button id="iterate">Iterate (Click repeatedly)</button>
 </div>
 <p>
-  In this simulation, the initial weights and bias you set serve (we picked some defaults for you) as starting points for the perceptron's decision line—the demarcation that differentiates the blue and red classes on the canvas. The weights impact the line's orientation, affecting how the model evaluates the importance of each axis for classification. Meanwhile, the bias shifts this line without changing its tilt, akin to an offset, enabling it to encapsulate the division between classes more effectively. Once you've chosen the initial values, the perceptron takes over, automatically adjusting these parameters based on the training set you provided. This iterative adjustment is the model's learning process, striving to refine the decision boundary to accurately separate new points according to the examples given. Your role is to plot the training points and observe how the model learns to classify them, showcasing the fundamental principles of machine learning in action.
+  In this simulation, the initial weights and bias you set serve as starting points for the perceptron's decision line—the demarcation that differentiates the blue and red classes on the canvas. The weights impact the line's orientation, affecting how the model evaluates the importance of each axis for classification. Meanwhile, the bias shifts this line without changing its tilt, akin to an offset, enabling it to encapsulate the division between classes more effectively. Once you've chosen the initial values, the perceptron takes over, automatically adjusting these parameters based on the training set you provided. This iterative adjustment is the model's learning process, striving to refine the decision boundary to accurately separate new points according to the examples given. Your role is to plot the training points and observe how the model learns to classify them, showcasing the fundamental principles of machine learning in action.
 </p>
 </body>
 </html>
