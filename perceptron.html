@@ -5,6 +5,11 @@
     <style>
         #plane { background: #f0f0f0; border: 1px solid black; }
         .color-selector { margin-bottom: 10px; }
+        .selected {
+            background-color: #cccccc; /* Light gray to indicate selection */
+            color: black; /* Make text color black for contrast */
+            border: 2px solid #444444; /* Darker border for emphasis */
+        }
     </style>
 </head>
 <script>
@@ -19,9 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let bias = 0;
     let learningRate = 0.1;
 
-    // Button event listeners for class selection
-    document.getElementById('class1Btn').addEventListener('click', () => currentLabel = 1); // Blue class
-    document.getElementById('class2Btn').addEventListener('click', () => currentLabel = -1); // Red class
+    document.getElementById('class1Btn').addEventListener('click', function() {
+        currentLabel = 1; 
+        this.classList.add('selected'); 
+        document.getElementById('class2Btn').classList.remove('selected'); 
+    });
+    
+    document.getElementById('class2Btn').addEventListener('click', function() {
+        currentLabel = -1; 
+        this.classList.add('selected');
+        document.getElementById('class1Btn').classList.remove('selected');
+    });
 
     canvas.addEventListener('click', function(event) {
         const rect = canvas.getBoundingClientRect();
@@ -127,7 +140,7 @@ This simulation offers a hands-on experience with machine learning, showing how 
 
 
 <div class="color-selector">
-    <button id="class1Btn">Blue Class</button>
+    <button id="class1Btn" class="selected">Blue Class</button>
     <button id="class2Btn">Red Class</button>
 </div>
 <canvas id="plane" width="500" height="500"></canvas>
