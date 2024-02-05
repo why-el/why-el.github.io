@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 <body>
 <p>
-Welcome to a basic perceptron simulation. This tool demonstrates a simple algorithm's ability to classify data into two categories. On this 2D canvas, you will plot points representing two scenarios, such as areas in a garden with different sunlight exposure.
+Welcome to a basic perceptron simulation. This tool demonstrates a simple algorithm's ability to learn how to classify data into two categories based on a training set. On this 2D canvas, you will plot points representing locations in a garden. The points need to have a meaning, of course, so one example could be that one set of points you plot has the feature of being more exposed to the sunlight, while others do not. The idea is that once you train your model with this data, you can then give it any location in the future, and it will predict its sun exposure. More elaborate, multi-layered perceptrons can take images of cats and dogs, for instance, but this example is hopefully simple enough to illustrate the idea.
 </p>
 
 <p>
@@ -146,7 +146,7 @@ This simulation offers a hands-on experience with machine learning, showing how 
     <button id="iterate">Iterate (Click repeatedly)</button>
 </div>
 <p>
-  In this simulation, the initial weights and bias you set serve as starting points for the perceptron's decision line—the demarcation that differentiates the blue and red classes on the canvas. The weights impact the line's orientation, affecting how the model evaluates the importance of each axis for classification. Meanwhile, the bias shifts this line without changing its tilt, akin to an offset, enabling it to encapsulate the division between classes more effectively. Once you've chosen the initial values, the perceptron takes over, automatically adjusting these parameters based on the training set you provided. This iterative adjustment is the model's learning process, striving to refine the decision boundary to accurately separate new points according to the examples given. Your role is to plot the training points and observe how the model learns to classify them, showcasing the fundamental principles of machine learning in action.
+  In this simulation, the initial weights and bias you set serve as starting points for the perceptron's decision line—the demarcation that differentiates the blue and red classes on the canvas. Geometrically, the weights impact the line's orientation, affecting how the model evaluates the importance of each axis for classification. Meanwhile, the bias shifts this line up and down without changing its tilt, akin to an offset, enabling it to encapsulate the division between classes more effectively. Once you've chosen the initial values, the perceptron takes over, automatically adjusting these parameters based on the training set you provided and your iteration clicks. This iterative adjustment is the model's learning process, striving to refine the decision boundary to accurately separate new points according to the examples given. Your role is to plot the training points and observe how the model learns to classify them, showcasing the fundamental principles of machine learning in action.
 </p>
 </body>
 </html>
