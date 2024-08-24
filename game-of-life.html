@@ -33,7 +33,9 @@
         .controls {
             margin-top: 20px;
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
+            justify-content: center;
         }
         button {
             padding: 10px 20px;
@@ -50,6 +52,32 @@
         }
         input[type=range] {
             width: 150px;
+        }
+        @media (max-width: 768px) {
+            td {
+                width: 6px;
+                height: 6px;
+            }
+            button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+            input[type=range] {
+                width: 120px;
+            }
+        }
+        @media (max-width: 480px) {
+            td {
+                width: 4px;
+                height: 4px;
+            }
+            button {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+            input[type=range] {
+                width: 100px;
+            }
         }
     </style>
 </head>
