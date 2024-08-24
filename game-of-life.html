@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game of Life</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #2c3e50;
+            font-family: Arial, sans-serif;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        td {
+            width: 10px;
+            height: 10px;
+            border: 1px solid #34495e;
+            transition: background-color 0.2s ease;
+        }
+        .alive {
+            background-color: #ecf0f1;
+        }
+        .dead {
+            background-color: #34495e;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #1abc9c;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        button:hover {
+            background-color: #16a085;
+        }
+        input[type=range] {
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <table id="grid"></table>
+    <div class="controls">
+        <button id="start">Start</button>
+        <button id="pause">Pause</button>
+        <button id="step">Step</button>
+        <button id="reset">Reset</button>
+        <button id="randomize">Randomize</button>
+        <input id="speed" type="range" min="50" max="1000" value="200">
+    </div>
+    <script>
+        const gridSize = 50;
+        const gridElement = document.getElementById('grid');
+        let cells = [];
+        let interval;
+        let running = false;
+        let speed = 200;
+
+        function createGrid() {
+            for (let row = 0; row < gridSize; row++) {
+                const tr = document.createElement('tr');
+                const rowCells = [];
+                for (let col = 0; col < gridSize; col++) {
+                    const td = document.createElement('td');
+                    td.className = 'dead';
+                    td.addEventListener('click', () => toggleCellState(td, row, col));
+                    tr.appendChild(td);
+                    rowCells.push(td);
+                }
+                gridElement.appendChild(tr);
+                cells.push(rowCells);
+            }
+        }
+
+        function toggleCellState(cell) {
+            cell.className = cell.className === 'dead' ? 'alive' : 'dead';
+        }
+
+        function getNeighborCount(row, col) {
+            let count = 0;
+            for (let i = -1; i <= 1; i++) {
+                for (let j = -1; j <= 1; j++) {
+                    if (i === 0 && j === 0) continue;
+                    const newRow = row + i;
+                    const newCol = col + j;
+                    if (newRow >= 0 && newRow < gridSize && newCol >= 0 && newCol < gridSize) {
+                        if (cells[newRow][newCol].className === 'alive') count++;
+                    }
+                }
+            }
+            return count;
+        }
+
+        function updateGrid() {
+            const newStates = cells.map((row, rIdx) =>
+                row.map((cell, cIdx) => {
+                    const aliveNeighbors = getNeighborCount(rIdx, cIdx);
+                    if (cell.className === 'alive') {
+                        return aliveNeighbors === 2 || aliveNeighbors === 3 ? 'alive' : 'dead';
+                    } else {
+                        return aliveNeighbors === 3 ? 'alive' : 'dead';
+                    }
+                })
+            );
+            newStates.forEach((row, rIdx) =>
+                row.forEach((state, cIdx) => {
+                    cells[rIdx][cIdx].className = state;
+                })
+            );
+        }
+
+        function startSimulation() {
+            if (!running) {
+                running = true;
+                interval = setInterval(updateGrid, speed);
+            }
+        }
+
+        function pauseSimulation() {
+            running = false;
+            clearInterval(interval);
+        }
+
+        function stepSimulation() {
+            updateGrid();
+        }
+
+        function resetGrid() {
+            pauseSimulation();
+            cells.forEach(row =>
+                row.forEach(cell => (cell.className = 'dead'))
+            );
+        }
+
+        function randomizeGrid() {
+            resetGrid();
+            cells.forEach(row =>
+                row.forEach(cell => {
+                    const randomValue = Math.random();
+                    cell.className = randomValue > 0.7 ? 'alive' : 'dead';
+                })
+            );
+        }
+
+        document.getElementById('start').addEventListener('click', startSimulation);
+        document.getElementById('pause').addEventListener('click', pauseSimulation);
+        document.getElementById('step').addEventListener('click', stepSimulation);
+        document.getElementById('reset').addEventListener('click', resetGrid);
+        document.getElementById('randomize').addEventListener('click', randomizeGrid);
+        document.getElementById('speed').addEventListener('input', e => {
+            speed = e.target.value;
+            if (running) {
+                clearInterval(interval);
+                interval = setInterval(updateGrid, speed);
+            }
+        });
+
+        createGrid();
+    </script>
+</body>
+</html>
