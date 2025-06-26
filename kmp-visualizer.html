@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KMP Algorithm Visualizer</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            padding: 30px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+            transition: border-color 0.2s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        .btn:hover {
+            background: #4338ca;
+            transform: translateY(-1px);
+        }
+        
+        .btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        
+        .visualization {
+            padding: 30px;
+        }
+        
+        .strings-container {
+            margin-bottom: 30px;
+        }
+        
+        .string-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+        }
+        
+        .chars-container {
+            display: flex;
+            align-items: center;
+            min-height: 39px;
+        }
+        
+        .string-label {
+            width: 80px;
+            font-weight: 600;
+            color: #374151;
+            margin-right: 15px;
+            padding-right: 5px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .char-box {
+            width: 35px;
+            height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e5e7eb;
+            margin-right: 2px;
+            font-weight: 600;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .char-box.current-text {
+            background: #fbbf24;
+            border-color: #f59e0b;
+            color: #92400e;
+        }
+        
+        .char-box.current-pattern {
+            background: #60a5fa;
+            border-color: #3b82f6;
+            color: #1e40af;
+        }
+        
+        .char-box.match {
+            background: #34d399;
+            border-color: #10b981;
+            color: #065f46;
+        }
+        
+        .char-box.mismatch {
+            background: #f87171;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+        
+        .step-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .info-panel {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-panel h3 {
+            color: #1e293b;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .info-panel p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+        
+        .failure-function {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .failure-function h4 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .failure-table {
+            display: flex;
+            gap: 2px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .failure-cell {
+            width: 35px;
+            height: 60px;
+            border: 1px solid #f59e0b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            transition: all 0.3s;
+        }
+        
+        .failure-cell.highlighted {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            border-width: 2px;
+        }
+        
+        .failure-char {
+            font-weight: bold;
+            color: #92400e;
+        }
+        
+        .failure-value {
+            font-size: 12px;
+            color: #059669;
+            font-weight: bold;
+        }
+        
+        .toggle-section {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .code-panel {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .code-panel h3 {
+            color: #60a5fa;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .code-line {
+            padding: 4px 8px;
+            margin: 2px 0;
+            border-radius: 4px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .code-line.highlighted {
+            background: #374151;
+            border-left: 4px solid #fbbf24;
+            transform: translateX(4px);
+        }
+        
+        .code-line.next-line {
+            background: #1f2937;
+            border-left: 4px solid #60a5fa;
+        }
+        
+        .variable-values {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #0f172a;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #34d399;
+        }
+        
+        .code-section {
+            margin-bottom: 20px;
+        }
+        
+        .algorithm-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 8px 16px;
+            background: #475569;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        
+        .tab-btn.active {
+            background: #4f46e5;
+        }
+        
+        .tab-btn:hover {
+            background: #3730a3;
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #4f46e5;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border: 2px solid white;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #4338ca;
+            transform: scale(1.1);
+            transition: all 0.2s;
+        }
+        
+        input[type="range"]::-moz-range-track {
+            background: #e5e7eb;
+            height: 6px;
+            border-radius: 3px;
+            border: none;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            background: #4f46e5;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .input-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .step-controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .char-box {
+                width: 30px;
+                height: 30px;
+                font-size: 14px;
+            }
+            
+            .string-row {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+
+        function KMPVisualizer() {
+            const [text, setText] = useState("ABABDABACDABABCABCABCABCAB");
+            const [pattern, setPattern] = useState("ABABCABCAB");
+            const [currentStep, setCurrentStep] = useState(0);
+            const [isRunning, setIsRunning] = useState(false);
+            const [activeTab, setActiveTab] = useState('search');
+            const [isFailureMode, setIsFailureMode] = useState(false);
+            const [failureCurrentStep, setFailureCurrentStep] = useState(0);
+            const [speed, setSpeed] = useState(800);
+            const [steps, setSteps] = useState([]);
+            const [failureFunction, setFailureFunction] = useState([]);
+            const [failureSteps, setFailureSteps] = useState([]);
+
+            const buildFailureFunction = useCallback((pattern) => {
+                const failure = new Array(pattern.length).fill(0);
+                const steps = [];
+                let j = 0;
+                
+                steps.push({ i: 0, j: 0, line: 1, description: 'Initialize failure[0] = 0', failure: [...failure] });
+                
+                for (let i = 1; i < pattern.length; i++) {
+                    steps.push({ i, j, line: 2, description: `Compare pattern[${i}] = '${pattern[i]}' with pattern[${j}] = '${pattern[j]}'`, failure: [...failure] });
+                    
+                    while (j > 0 && pattern[i] !== pattern[j]) {
+                        steps.push({ i, j, line: 3, description: `Mismatch! Using failure[${j-1}] = ${failure[j-1]}`, failure: [...failure] });
+                        j = failure[j - 1];
+                        steps.push({ i, j, line: 3, description: `Set j = ${j}`, failure: [...failure] });
+                    }
+                    
+                    if (pattern[i] === pattern[j]) {
+                        steps.push({ i, j, line: 4, description: `Match! Increment j to ${j + 1}`, failure: [...failure] });
+                        j++;
+                    }
+                    
+                    failure[i] = j;
+                    steps.push({ i, j, line: 5, description: `Set failure[${i}] = ${j}`, failure: [...failure] });
+                }
+                
+                setFailureSteps(steps);
+                return failure;
+            }, []);
+
+            const runKMP = useCallback(() => {
+                const failure = buildFailureFunction(pattern);
+                setFailureFunction(failure);
+                
+                const steps = [];
+                const foundMatches = [];
+                let i = 0; // text index
+                let j = 0; // pattern index
+                
+                while (i < text.length) {
+                    const step = {
+                        textIndex: i,
+                        patternIndex: j,
+                        patternStart: i - j,
+                        isMatch: text[i] === pattern[j],
+                        description: '',
+                        matches: [...foundMatches],
+                        line: 0,
+                        nextLine: 0
+                    };
+                    
+                    if (text[i] === pattern[j]) {
+                        step.line = 1;
+                        step.description = `Match: '${text[i]}' === '${pattern[j]}'`;
+                        i++;
+                        j++;
+                        step.nextLine = 2;
+                        
+                        if (j === pattern.length) {
+                            const matchPos = i - j;
+                            foundMatches.push(matchPos);
+                            step.line = 3;
+                            step.description = `🎉 Complete match found at position ${matchPos}!`;
+                            step.matches = [...foundMatches];
+                            steps.push(step);
+                            
+                            // Reset for next potential match
+                            j = failure[j - 1];
+                            
+                            // Add step showing reset
+                            if (i < text.length) {
+                                steps.push({
+                                    textIndex: i,
+                                    patternIndex: j,
+                                    patternStart: i - j,
+                                    isMatch: false,
+                                    description: `Reset using failure function: j = ${j}. Continue searching...`,
+                                    matches: [...foundMatches],
+                                    line: 4,
+                                    nextLine: 1
+                                });
+                            }
+                            continue;
+                        }
+                    } else {
+                        step.line = 5;
+                        step.description = `Mismatch: '${text[i]}' !== '${pattern[j]}'`;
+                        if (j !== 0) {
+                            step.line = 6;
+                            step.description += ` → Using failure function: j = ${failure[j - 1]}`;
+                            j = failure[j - 1];
+                            step.nextLine = 6;
+                        } else {
+                            step.line = 7;
+                            i++;
+                            step.nextLine = 1;
+                        }
+                    }
+                    
+                    steps.push(step);
+                }
+                
+                // Add final result step
+                const finalStep = {
+                    textIndex: text.length,
+                    patternIndex: 0,
+                    patternStart: text.length,
+                    isMatch: false,
+                    description: foundMatches.length > 0 
+                        ? `✅ Search complete! Pattern found ${foundMatches.length} time(s) at position(s): ${foundMatches.join(', ')}`
+                        : `❌ Search complete! Pattern not found in text.`,
+                    matches: foundMatches,
+                    line: 0,
+                    nextLine: 0
+                };
+                steps.push(finalStep);
+                
+                setSteps(steps);
+                setCurrentStep(0);
+            }, [text, pattern, buildFailureFunction]);
+
+            useEffect(() => {
+                runKMP();
+            }, [runKMP]);
+
+            const generateRandomText = () => {
+                const chars = 'ABCD';
+                let result = '';
+                for (let i = 0; i < 30; i++) {
+                    result += chars[Math.floor(Math.random() * chars.length)];
+                }
+                setText(result);
+            };
+
+            const generateRandomPattern = () => {
+                const chars = 'ABCD';
+                let result = '';
+                const length = 3 + Math.floor(Math.random() * 5);
+                for (let i = 0; i < length; i++) {
+                    result += chars[Math.floor(Math.random() * chars.length)];
+                }
+                setPattern(result);
+            };
+
+            const nextStep = () => {
+                if (isFailureMode) {
+                    if (failureCurrentStep < failureSteps.length - 1) {
+                        setFailureCurrentStep(failureCurrentStep + 1);
+                    }
+                } else {
+                    if (currentStep < steps.length - 1) {
+                        setCurrentStep(currentStep + 1);
+                    }
+                }
+            };
+
+            const prevStep = () => {
+                if (isFailureMode) {
+                    if (failureCurrentStep > 0) {
+                        setFailureCurrentStep(failureCurrentStep - 1);
+                    }
+                } else {
+                    if (currentStep > 0) {
+                        setCurrentStep(currentStep - 1);
+                    }
+                }
+            };
+
+            const reset = () => {
+                if (isFailureMode) {
+                    setFailureCurrentStep(0);
+                } else {
+                    setCurrentStep(0);
+                }
+                setIsRunning(false);
+            };
+
+            const autoPlay = () => {
+                setIsRunning(!isRunning);
+            };
+
+            const switchMode = () => {
+                setIsFailureMode(!isFailureMode);
+                setIsRunning(false);
+                if (!isFailureMode) {
+                    setActiveTab('failure');
+                } else {
+                    setActiveTab('search');
+                }
+            };
+
+            // Sync code tabs with current mode
+            useEffect(() => {
+                if (isFailureMode) {
+                    setActiveTab('failure');
+                } else {
+                    setActiveTab('search');
+                }
+            }, [isFailureMode]);
+
+            useEffect(() => {
+                let interval;
+                if (isRunning) {
+                    if (isFailureMode && failureCurrentStep < failureSteps.length - 1) {
+                        interval = setInterval(() => {
+                            setFailureCurrentStep(prev => {
+                                if (prev >= failureSteps.length - 1) {
+                                    setIsRunning(false);
+                                    return prev;
+                                }
+                                return prev + 1;
+                            });
+                        }, speed);
+                    } else if (!isFailureMode && currentStep < steps.length - 1) {
+                        interval = setInterval(() => {
+                            setCurrentStep(prev => {
+                                if (prev >= steps.length - 1) {
+                                    setIsRunning(false);
+                                    return prev;
+                                }
+                                return prev + 1;
+                            });
+                        }, speed);
+                    } else {
+                        setIsRunning(false);
+                    }
+                }
+                return () => clearInterval(interval);
+            }, [isRunning, currentStep, failureCurrentStep, steps.length, failureSteps.length, speed, isFailureMode]);
+
+            const currentStepData = isFailureMode ? failureSteps[failureCurrentStep] || {} : steps[currentStep] || {};
+            const { textIndex = 0, patternIndex = 0, patternStart = 0, isMatch = false, description = '', matches = [] } = currentStepData;
+            const currentFailureData = failureSteps[failureCurrentStep] || {};
+            const totalSteps = isFailureMode ? failureSteps.length : steps.length;
+            const currentStepNumber = isFailureMode ? failureCurrentStep : currentStep;
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1>KMP Algorithm Visualizer</h1>
+                        <div style={{marginTop: '20px', padding: '15px', background: 'rgba(255,255,255,0.1)', borderRadius: '8px', fontSize: '0.95rem', lineHeight: '1.5'}}>
+                            This visualizer shows both the search algorithm and failure function as they run during Knuth-Morris-Pratt. I used Claude to make it. The reason I made it is because I saw a very intriguing comment from Robert Sedgewick in the first edition of Algorithms in C: he said that the construction of the failure function is more or less running KMP on the pattern itself. Kinda hard to see hence this little experiment.
+                        </div>
+                    </div>
+                    
+                    <div className="controls">
+                        <div className="input-group">
+                            <label>Text:</label>
+                            <div className="input-row">
+                                <input 
+                                    type="text" 
+                                    value={text} 
+                                    onChange={(e) => setText(e.target.value.toUpperCase())}
+                                    placeholder="Enter text to search in"
+                                />
+                                <button className="btn btn-secondary" onClick={generateRandomText}>
+                                    Generate
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div className="input-group">
+                            <label>Pattern:</label>
+                            <div className="input-row">
+                                <input 
+                                    type="text" 
+                                    value={pattern} 
+                                    onChange={(e) => setPattern(e.target.value.toUpperCase())}
+                                    placeholder="Enter pattern to search for"
+                                />
+                                <button className="btn btn-secondary" onClick={generateRandomPattern}>
+                                    Generate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="visualization">
+                        <div className="strings-container">
+                            {!isFailureMode && (
+                                <>
+                                    <div className="string-row">
+                                        <span className="string-label">Text:</span>
+                                        <div className="chars-container">
+                                            {text.split('').map((char, i) => {
+                                                let className = 'char-box';
+                                                if (i === textIndex) {
+                                                    className += ' current-text';
+                                                }
+                                                // Check if this position is part of any found match
+                                                for (let matchPos of matches) {
+                                                    if (i >= matchPos && i < matchPos + pattern.length) {
+                                                        className += ' match';
+                                                        break;
+                                                    }
+                                                }
+                                                return (
+                                                    <div key={i} className={className}>
+                                                        {char}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="string-row">
+                                        <span className="string-label">Pattern:</span>
+                                        <div className="chars-container">
+                                            {Array(patternStart).fill(' ').map((_, i) => (
+                                                <div key={`space-${i}`} className="char-box" style={{border: 'none', background: 'transparent'}}></div>
+                                            ))}
+                                            {pattern.split('').map((char, i) => (
+                                                <div 
+                                                    key={i} 
+                                                    className={`char-box ${
+                                                        i === patternIndex ? 'current-pattern' : ''
+                                                    } ${
+                                                        i < patternIndex ? (isMatch ? 'match' : 'mismatch') : ''
+                                                    }`}
+                                                >
+                                                    {char}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                            
+                            {isFailureMode && (
+                                <div className="string-row">
+                                    <span className="string-label">Pattern:</span>
+                                    <div className="chars-container">
+                                        {pattern.split('').map((char, i) => (
+                                            <div 
+                                                key={i} 
+                                                className={`char-box ${
+                                                    i === currentFailureData.i ? 'current-text' : 
+                                                    i === currentFailureData.j ? 'current-pattern' : ''
+                                                }`}
+                                            >
+                                                {char}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                        
+                        <div className="step-controls">
+                            <button className="btn" onClick={switchMode}>
+                                {isFailureMode ? 'Switch to KMP Search' : 'Switch to Failure Function'}
+                            </button>
+                            <button className="btn" onClick={prevStep} disabled={currentStepNumber === 0}>
+                                ← Previous
+                            </button>
+                            <button className="btn" onClick={autoPlay}>
+                                {isRunning ? 'Pause' : 'Auto Play'}
+                            </button>
+                            <button className="btn" onClick={nextStep} disabled={currentStepNumber >= totalSteps - 1}>
+                                Next →
+                            </button>
+                            <button className="btn btn-secondary" onClick={reset}>
+                                Reset
+                            </button>
+                        </div>
+                        
+                        <div style={{display: 'flex', alignItems: 'center', gap: '10px', marginTop: '15px', justifyContent: 'center'}}>
+                            <span style={{fontSize: '14px', color: '#6b7280', minWidth: '60px'}}>Speed:</span>
+                            <input 
+                                type="range" 
+                                min="200" 
+                                max="3000" 
+                                step="50"
+                                value={3200 - speed}
+                                onChange={(e) => setSpeed(3200 - parseInt(e.target.value))}
+                                style={{width: '150px'}}
+                            />
+                            <span style={{fontSize: '12px', color: '#9ca3af', minWidth: '50px'}}>
+                                {speed <= 300 ? 'Fast' : speed <= 800 ? 'Normal' : 'Slow'}
+                            </span>
+                        </div>
+                        
+                        <div className="info-panel">
+                            <h3>{isFailureMode ? 'Failure Function Building' : 'KMP Search'} - Step {currentStepNumber + 1} of {totalSteps}</h3>
+                            <p>{isFailureMode ? currentFailureData.description : description}</p>
+                            {!isFailureMode && <p><strong>Text Index:</strong> {textIndex}, <strong>Pattern Index:</strong> {patternIndex}</p>}
+                            {isFailureMode && <p><strong>Pattern Index i:</strong> {currentFailureData.i}, <strong>LPS Index j:</strong> {currentFailureData.j}</p>}
+                        </div>
+                        
+                        <div className="code-panel">
+                                <div className="algorithm-tabs">
+                                    <button 
+                                        className={`tab-btn ${activeTab === 'search' ? 'active' : ''}`}
+                                        onClick={() => {
+                                            setActiveTab('search');
+                                            if (isFailureMode) {
+                                                setIsFailureMode(false);
+                                                setIsRunning(false);
+                                            }
+                                        }}
+                                    >
+                                        KMP Search Algorithm
+                                    </button>
+                                    <button 
+                                        className={`tab-btn ${activeTab === 'failure' ? 'active' : ''}`}
+                                        onClick={() => {
+                                            setActiveTab('failure');
+                                            if (!isFailureMode) {
+                                                setIsFailureMode(true);
+                                                setIsRunning(false);
+                                            }
+                                        }}
+                                    >
+                                        Build Failure Function
+                                    </button>
+                                </div>
+                                
+                                {activeTab === 'search' && (
+                                    <div className="code-section">
+                                        <h3>Python Implementation - KMP Search</h3>
+                                        <div className="code-line">def kmp_search(text, pattern, failure):</div>
+                                        <div className={`code-line ${(steps[currentStep]?.line === 1) ? 'highlighted' : ''}`}>
+                                            {"    "}while i &lt; len(text):
+                                            {(steps[currentStep]?.line === 1) && (
+                                                <span className="variable-values">i={textIndex}, j={patternIndex}</span>
+                                            )}
+                                        </div>
+                                        <div className={`code-line ${(steps[currentStep]?.line === 1 || steps[currentStep]?.line === 5) ? 'highlighted' : ''}`}>
+                                            {"        "}if text[i] == pattern[j]:
+                                            {((steps[currentStep]?.line === 1) || (steps[currentStep]?.line === 5)) && (
+                                                <span className="variable-values">'{text[textIndex]}' == '{pattern[patternIndex]}'</span>
+                                            )}
+                                        </div>
+                                        <div className={`code-line ${(steps[currentStep]?.line === 2) ? 'highlighted' : ''}`}>
+                                            {"            "}i += 1; j += 1
+                                            {(steps[currentStep]?.line === 2) && (
+                                                <span className="variable-values">i={textIndex + 1}, j={patternIndex + 1}</span>
+                                            )}
+                                        </div>
+                                        <div className={`code-line ${(steps[currentStep]?.line === 3) ? 'highlighted' : ''}`}>
+                                            {"            "}if j == len(pattern):
+                                        </div>
+                                        <div className={`code-line ${(steps[currentStep]?.line === 4) ? 'highlighted' : ''}`}>
+                                            {"                "}return i - j  # Found match!
+                                        </div>
+                                        <div className={`code-line ${(steps[currentStep]?.line === 6) ? 'highlighted' : ''}`}>
+                                            {"        "}elif j != 0:
+                                        </div>
+                                        <div className={`code-line ${(steps[currentStep]?.line === 6) ? 'highlighted' : ''}`}>
+                                            {"            "}j = failure[j - 1]  # Use failure function
+                                            {(steps[currentStep]?.line === 6) && (
+                                                <span className="variable-values">j = {failureFunction[patternIndex - 1] || 0}</span>
+                                            )}
+                                        </div>
+                                        <div className={`code-line ${(steps[currentStep]?.line === 7) ? 'highlighted' : ''}`}>
+                                            {"        "}else:
+                                        </div>
+                                        <div className={`code-line ${(steps[currentStep]?.line === 7) ? 'highlighted' : ''}`}>
+                                            {"            "}i += 1
+                                            {(steps[currentStep]?.line === 7) && (
+                                                <span className="variable-values">i={textIndex + 1}</span>
+                                            )}
+                                        </div>
+                                        <div className="code-line">{"    "}return -1  # Pattern not found</div>
+                                    </div>
+                                )}
+                                
+                                {activeTab === 'failure' && (
+                                    <div className="code-section">
+                                        <h3>Python Implementation - Build Failure Function</h3>
+                                        <div className="code-line">def build_failure_function(pattern):</div>
+                                        <div className={`code-line ${(currentFailureData?.line === 1) ? 'highlighted' : ''}`}>
+                                            {"    "}failure = [0] * len(pattern)
+                                        </div>
+                                        <div className={`code-line ${(currentFailureData?.line === 2) ? 'highlighted' : ''}`}>
+                                            {"    "}for i in range(1, len(pattern)):
+                                            {(currentFailureData?.line === 2) && (
+                                                <span className="variable-values">i={currentFailureData?.i}, j={currentFailureData?.j}</span>
+                                            )}
+                                        </div>
+                                        <div className={`code-line ${(currentFailureData?.line === 3) ? 'highlighted' : ''}`}>
+                                            {"        "}while j &gt; 0 and pattern[i] != pattern[j]:
+                                        </div>
+                                        <div className={`code-line ${(currentFailureData?.line === 3) ? 'highlighted' : ''}`}>
+                                            {"            "}j = failure[j - 1]
+                                            {(currentFailureData?.line === 3) && (
+                                                <span className="variable-values">j={currentFailureData?.failure?.[currentFailureData?.j - 1] || 0}</span>
+                                            )}
+                                        </div>
+                                        <div className={`code-line ${(currentFailureData?.line === 4) ? 'highlighted' : ''}`}>
+                                            {"        "}if pattern[i] == pattern[j]:
+                                        </div>
+                                        <div className={`code-line ${(currentFailureData?.line === 4) ? 'highlighted' : ''}`}>
+                                            {"            "}j += 1
+                                            {(currentFailureData?.line === 4) && (
+                                                <span className="variable-values">j={currentFailureData?.j + 1}</span>
+                                            )}
+                                        </div>
+                                        <div className={`code-line ${(currentFailureData?.line === 5) ? 'highlighted' : ''}`}>
+                                            {"        "}failure[i] = j
+                                            {(currentFailureData?.line === 5) && (
+                                                <span className="variable-values">failure[{currentFailureData?.i}] = {currentFailureData?.j}</span>
+                                            )}
+                                        </div>
+                                        <div className="code-line">{"    "}return failure</div>
+                                    </div>
+                                )}
+                            </div>
+                    </div>
+                    
+                    <div className="toggle-section">
+                        
+                        {!isFailureMode && (
+                            <div className="failure-function">
+                                <h4>Failure Function (LPS Array)</h4>
+                                <p>Shows the length of the longest proper prefix which is also a suffix for each position:</p>
+                                <div className="failure-table">
+                                    {pattern.split('').map((char, i) => (
+                                        <div key={i} className="failure-cell">
+                                            <div className="failure-char">{char}</div>
+                                            <div className="failure-value">{failureFunction[i]}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                        
+                        {isFailureMode && (
+                            <div className="failure-function">
+                                <h4>Building Failure Function (LPS Array)</h4>
+                                <p>Current state of the LPS array being built:</p>
+                                <div className="failure-table">
+                                    {pattern.split('').map((char, i) => (
+                                        <div key={i} className={`failure-cell ${i === currentFailureData.i ? 'highlighted' : ''}`}>
+                                            <div className="failure-char">{char}</div>
+                                            <div className="failure-value">{currentFailureData.failure?.[i] || 0}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<KMPVisualizer />, document.getElementById('root'));
+    </script>
+</body>
+</html>
