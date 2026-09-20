@@ -1,12 +1,14 @@
 {
   "schemaVersion": 1,
   "application": "http-cache-education",
-  "sourceRevision": "ac9e4e860c07959e7183df8501bc1af3b0fe8d12",
+  "sourceRevision": "f9aaa6effcce4fa4b5e965421229dd0d13569071",
   "files": {
     "assets/index-BP8BQeHG.css": "5080466af0e85607fc93137c9556121a69b189ee7527bf7a2fb2bedd8a6c6d87",
     "assets/index-BPdb1Ecm.js": "c1ef1d0a4bd933de9720a096e474bc81672bbf6ce3df0ae124714cefc9746533",
     "assets/index-BWL53l12.css": "0b69c2514823d934c27a4a563e915e27f883481b05a660c3133c4f5444256aff",
     "assets/index-DBoZ8WnA.js": "0bf3a3021f0381cd1a26b08e3fab3d93dd7d14224a781ee0b36fa24cbe32ff7c",
-    "index.html": "87ec7bcbbeab376fc9c96c74cb99b2c1e900e97cf20dd186e2fae6038e887cf4"
+    "assets/index-Daw580Rm.js": "46a4aba38317750e68784983c131bef90d0217f10d4c4100144abc03afa7dbf6",
+    "assets/index-TDA0KFKf.css": "ea0fb8af5f5842687680fb95158b3e459edcdb1d813a50003934bedd0a4bec83",
+    "index.html": "35cd2c95d446394645d402ed41c090ca5460893877464cb3622fb72c203a1f67"
   }
 }
