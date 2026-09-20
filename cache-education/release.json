@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "application": "http-cache-education",
+  "sourceRevision": "eb4bd49a5c132608485826f67f590ae5cc7cd8c9",
+  "files": {
+    "assets/index-BPdb1Ecm.js": "c1ef1d0a4bd933de9720a096e474bc81672bbf6ce3df0ae124714cefc9746533",
+    "assets/index-BWL53l12.css": "0b69c2514823d934c27a4a563e915e27f883481b05a660c3133c4f5444256aff",
+    "index.html": "a627b706c71199ba371225f7a394eb528b225b0566809f77fe19e973802429c4"
+  }
+}
