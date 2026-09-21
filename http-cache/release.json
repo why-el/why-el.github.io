@@ -1,10 +1,11 @@
 {
   "schemaVersion": 1,
   "application": "http-cache-education",
-  "sourceRevision": "db79f4d6b91296649e83f465a1be0fa7135067ed",
+  "sourceRevision": "cfdf98fdbee7a6056053347b085bcfeda8267023",
   "files": {
     "assets/index-BQDE-Gee.css": "d42787912ac72139f39805e971bf431a3c65aa40e3f14f3a978a7727fffd83c2",
+    "assets/index-B_PsZQCz.js": "0089acf8d39298768b4038a6c6f0e479ccb67dd08bf491e1bf4a50a164589c76",
     "assets/index-Wy50sStP.js": "08fee3193b3ceb9de0e317d1a9ab6d4f5789695685150ae20a12b69f4fafcff4",
-    "index.html": "4d3b97033c7ea01cba4b9f9e9b7fccd3466c88d4218c4168b81508c7cbf9dcdc"
+    "index.html": "6badc52e4ab818d5a7922080dbf9e9298fe493f9e883697e716e9a5590a0cd35"
   }
 }
