@@ -1,8 +1,9 @@
 {
   "schemaVersion": 1,
   "application": "http-cache-education",
-  "sourceRevision": "22797b33621556c9abc1bd81f5f588297c5a6c66",
+  "sourceRevision": "f9c0b0b46956f0e45d289833d89c68077ff8c5f5",
   "files": {
+    "assets/index-BJzxIbmM.css": "85234390fa5d71f7ed125e34ee0fd200e35da90e7afcb0bc91b97a9348b21859",
     "assets/index-BQDE-Gee.css": "d42787912ac72139f39805e971bf431a3c65aa40e3f14f3a978a7727fffd83c2",
     "assets/index-B_PsZQCz.js": "0089acf8d39298768b4038a6c6f0e479ccb67dd08bf491e1bf4a50a164589c76",
     "assets/index-BfX6eds4.js": "d42f366ea71e598c37af360720feb8862fcef339d4506b05186ce0ec69f69ec2",
@@ -10,6 +11,7 @@
     "assets/index-By8uOwpM.js": "1bf8b58af8987751c455d370f07164b599db4f82e028e94f2cba49ae6a5b844f",
     "assets/index-Wy50sStP.js": "08fee3193b3ceb9de0e317d1a9ab6d4f5789695685150ae20a12b69f4fafcff4",
     "assets/index-mrfWx1tk.css": "4342a9eabf3d29effa90fdb9149f5be9f2e58b61f3af634bfb064b6b8a976236",
-    "index.html": "a962dc9cb70b2e0a100d81a981c9917fd926c46c844ab619f46b6c4697e66f00"
+    "assets/index-nMDy0Kr6.js": "0a31a442d1003c245f919dcf18aed00cdc2bb9004f4855b72757f5d93ef77f89",
+    "index.html": "4698c3590d80329bfd0baabfa3ea0f536ca88daba1502dad8c44c4a454a8fbbf"
   }
 }
