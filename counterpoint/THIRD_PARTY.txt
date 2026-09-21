@@ -1,0 +1,4 @@
+Counterpoint includes Three.js, Copyright 2010-2026 Three.js authors.
+Three.js is distributed under the MIT License: https://github.com/mrdoob/three.js/blob/dev/LICENSE
+The complete source repository retains locked package metadata and original dependency notices.
+All sculpture geometry, textures, sounds, and UI are original code, without external recordings, stock models, or fonts.
